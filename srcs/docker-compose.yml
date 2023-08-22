@@ -1,0 +1,73 @@
+
+services:
+  nginx:
+    build: requirements/nginx
+    container_name: nginx
+    image: nginx
+    ports:
+      # - 80:80
+      - 443:443
+    restart: always
+    volumes:
+      # - ./requirements/tools/php:/var/www/html
+      - wp_volume:/var/www/html/wordpress
+    depends_on:
+      - wordpress
+    networks:
+      - inception_network
+
+  mariadb:
+    init: true
+    build: ./requirements/mariadb/
+    container_name: mariadb
+    image: mariadb
+    restart: always
+    expose:
+      - "3306"
+    env_file:
+      - .env
+    volumes:
+      - db_volume:/var/lib/mysql/
+    networks:
+      - inception_network
+
+  wordpress:
+    build: requirements/wordpress
+    container_name: wordpress
+    image: wordpress
+    restart: always
+    volumes:
+      # - ./requirements/tools/php:/var/www/html
+      - wp_volume:/var/www/html/wordpress
+    expose:
+      - "9000"
+    networks:
+      - inception_network
+    env_file:
+      - .env
+    depends_on:
+      # - mariadb
+      mariadb:
+        condition: service_healthy
+    
+
+volumes:
+  wp_volume:
+     name: wp_volume
+     driver: local
+     driver_opts:
+       type: none
+       device: /home/junoh/data/wordpress
+       o: bind
+  db_volume:
+     name: db_volume
+     driver: local
+     driver_opts:
+       type: none
+       device: /home/junoh/data/mariadb
+       o: bind
+
+networks:
+  inception_network:
+    name: inception_network
+    driver: bridge
