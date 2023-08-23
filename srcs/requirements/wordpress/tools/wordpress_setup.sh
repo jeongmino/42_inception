@@ -13,5 +13,7 @@ if [ ! -f "/var/www/html/wordpress/index.php" ]; then
   wp core install --url=https://junoh.42.fr --title=$WORDPRESS_TITLE --admin_user=$WORDPRESS_DB_ADMIN --admin_password=$WORDPRESS_DB_ADMIN_PASSWORD --admin_email=$WORDPRESS_DB_ADMIN_EMAIL --skip-email --allow-root
   wp user create $WORDPRESS_USER $WORDPRESS_EMAIL --role=author --user_pass=$WORDPRESS_PASSWORD --allow-root && \
   wp plugin update --all --allow-root
+  wp option update comment_moderation 1 --allow-root
+
 fi
 exec "php-fpm7.3" "-F"
