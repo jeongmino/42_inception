@@ -16,4 +16,4 @@ if [ ! -f "/var/www/html/wordpress/index.php" ]; then
   wp option update comment_moderation 1 --allow-root
 
 fi
-exec "php-fpm7.3" "-F"
+exec "php-fpm7.4" "-F"

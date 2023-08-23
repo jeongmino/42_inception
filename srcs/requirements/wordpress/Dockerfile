@@ -1,4 +1,4 @@
-FROM	debian:buster
+FROM	debian:bullseye
 
 RUN		apt-get update -y && \
 		apt-get upgrade -y && \
@@ -7,7 +7,7 @@ RUN		apt-get update -y && \
 		wget \
 		curl \
 		tar \
-		php7.3-fpm \
+		php7.4-fpm \
 		php-cli \
 		php-mysql \
 		vim \
@@ -15,7 +15,7 @@ RUN		apt-get update -y && \
 
 
 COPY	./tools/wordpress_setup.sh /tmp/wordpress_setup.sh
-COPY	./conf/www.conf /etc/php/7.3/fpm/pool.d/www.conf
+COPY	./conf/www.conf /etc/php/7.4/fpm/pool.d/www.conf
 COPY	./tools/wp-config.php /tmp/wp-config.php
 
 WORKDIR	/var/www/html/wordpress
